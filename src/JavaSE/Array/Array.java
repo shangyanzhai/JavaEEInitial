@@ -193,5 +193,12 @@ public class Array {
 //        }
 //        System.out.println();
 //        System.out.println(b);
+
+
+        int[] arr = new int[3];
+        Arrays.fill(arr,0);//调用 Arrays中 fill() 方法，进行快速初始化 ,但是该方法初始化仅限一维数组
+        for(int i : arr){
+            System.out.print(i);
+        }
     }
 }
