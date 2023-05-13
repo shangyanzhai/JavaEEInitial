@@ -19,5 +19,14 @@ public class DoubleArray {
             }
             System.out.println();
         }
+
+        //for-each 表达式遍历二维数组
+        for(int[] i : n)
+        {
+            for(int j : i)
+            {
+                System.out.println(j);
+            }
+        }
     }
 }
