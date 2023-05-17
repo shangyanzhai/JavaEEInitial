@@ -2,7 +2,9 @@ package JavaEE.Threads;
 
 import java.util.concurrent.TimeUnit;
 
-public class ThreadMethod {
+public class CommonThreadMethod {
+    //通用方法
+
     /**
      * //Thread.sleep(Timeout)
      * //外在现象：该语句会使得程序休眠（sleep）一段时间，才继续后序代码的执行。
@@ -68,6 +70,7 @@ public class ThreadMethod {
 
             Thread thread = Thread.currentThread();
 //            System.out.println(thread == this);    // 无法比较
+            System.out.println((Runnable)thread == this);
             System.out.println(thread.getName());
         }
     }
@@ -81,7 +84,7 @@ public class ThreadMethod {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
 //        Thread thread = Thread.currentThread();
 //
 //        System.out.println(thread.getName());
@@ -89,5 +92,17 @@ public class ThreadMethod {
         PrintName t1 = new PrintName();
         PrintName t2 = new PrintName();
         t2.start();
+    }
+
+    //线程的常见控制方法
+
+    /**
+     * 启动线程 thread.start()
+     * 启动线程，即将线程的状态从 NEW 变成 RUNNABLE
+     * (实际只是就绪状态，什么时候真正被调度到 CPU 上开始执行线程中的语句，对我们来说是随机的）
+     */
+    //对比
+    public static void main(String[] args) {
+
     }
 }
