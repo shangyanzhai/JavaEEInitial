@@ -1,5 +1,7 @@
 package JavaEE.Threads;
 
+import java.util.concurrent.TimeUnit;
+
 public class ThreadMethod {
     /**
      * //Thread.sleep(Timeout)
@@ -13,6 +15,79 @@ public class ThreadMethod {
         Thread thread = new Thread();
         System.out.println("A");
         thread.sleep(3 * 1000);
+
+        //变形
+        TimeUnit.DAYS.sleep(1);
+        TimeUnit.HOURS.sleep(1);
+        TimeUnit.MICROSECONDS.sleep(1);
         System.out.println("B");
+    }
+
+    /**
+     * //Thread.yield()
+     * //让出CPU
+     * //只是让出 CPU，但状态仍然是 Runnable（就绪），随时可以再次被调度。适合做一些长期任务时，让出 CPU 让其他线程也可以使用 CPU.
+     */
+    static class PrintThread extends Thread {
+        private final String target;
+        private final boolean isYield;
+
+        PrintThread(String target, boolean isYield) {
+            this.target = target;
+            this.isYield = isYield;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                System.out.println(target);
+                if (isYield) {
+                    Thread.yield();
+                }
+            }
+        }
+    }
+
+    public static void main2(String[] args) {
+//        PrintThread printA = new PrintThread("A", false);
+        PrintThread printA = new PrintThread("A", true);
+        PrintThread printB = new PrintThread("B", false);
+
+        printA.start();
+        printB.start();
+    }
+
+
+    /**
+     * //Thread.currentThread()
+     * //获取当前线程的实例引用。
+     */
+    static class PrintTask implements Runnable {
+        @Override
+        public void run() {
+
+            Thread thread = Thread.currentThread();
+//            System.out.println(thread == this);    // 无法比较
+            System.out.println(thread.getName());
+        }
+    }
+
+    static class PrintName extends Thread {
+        @Override
+        public void run() {
+            Thread thread = Thread.currentThread();
+            System.out.println(thread == this);
+            System.out.println(thread.getName());
+        }
+    }
+
+    public static void main(String[] args) {
+//        Thread thread = Thread.currentThread();
+//
+//        System.out.println(thread.getName());
+
+        PrintName t1 = new PrintName();
+        PrintName t2 = new PrintName();
+        t2.start();
     }
 }

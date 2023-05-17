@@ -122,6 +122,8 @@ public class Strings {
         String s7 = "Hello";
         String s8 = "hello world 123";
         //s5转为全大写处理
+        s5.toUpperCase();
+//        System.out.println(s5);
         s5 = s5.toUpperCase();
         System.out.println(s5);
         //s6转为全小写
