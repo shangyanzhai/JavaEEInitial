@@ -1,19 +1,23 @@
 package JavaSE.Scanner;
+import java.io.IOException;
 import java.util.*;
 public class ScannerTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
-//        while(scanner.hasNext()){
-//            int i = scanner.nextInt();
-//            long l = scanner.nextLong();
-//            String str = scanner.nextLine();
-//            float f = scanner.nextFloat();
-//            short s = scanner.nextShort();
-//            byte b = scanner.nextByte();
-//            double d = scanner.nextDouble();
-//            boolean bl = scanner.nextBoolean();
-//        }
+        while(scanner.hasNext()){
+            int i = scanner.nextInt();
+            long l = scanner.nextLong();
+            String str = scanner.nextLine();
+            float f = scanner.nextFloat();
+            short s = scanner.nextShort();
+            byte b = scanner.nextByte();
+            double d = scanner.nextDouble();
+            boolean bl = scanner.nextBoolean();
+            char c = scanner.nextLine().charAt(0);
+            //或者用System.in
+            char c1 = (char)System.in.read();
+        }
 
         /**
          * //创建一个String[] 字符串数组，在输入之前，必须要先输入nextLine()
