@@ -37,5 +37,17 @@ public class ScannerTest {
                 System.out.println(str[i]);
             }
         }
+
+        /**
+         * 产生InputMismatchException异常的原因是：nextLine()不能用在nextInt后面。
+         * 因为nextLine()方法是返回的是Enter键之前的所有字符，
+         * 在使用了nextInt() 方法之后在其后输入的空格键、Tab键或Enter键等视为分隔符或结束符，其仍在缓冲区内；
+         * 若紧接着使用nextLine() ,则nextLine() 自动读取Enter等作为其结束符，
+         * 则无法从键盘输入值，强行输入会报出InputMismatchException异常。
+         */
+        while(scanner.hasNext()){
+            int num = scanner.nextInt();
+            String str = scanner.nextLine();
+        }
     }
 }
