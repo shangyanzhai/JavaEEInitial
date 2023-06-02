@@ -37,7 +37,13 @@ public class SortTesting {
 //        Sort.heapSort(array);
 //        Sort.quickSort(array);
         double s = System.currentTimeMillis();
-        MySort.shellSort(array);
+//        MySort.bubbleSort(array);
+//        MySort.selectSort(array);
+//        MySort.insertSort(array);
+//        MySort.heapSort(array);
+//        MySort.shellSort(array);
+//        MySort.quickSort(array);
+        MySort.quickSort非递归版本(array);
         double e = System.currentTimeMillis();
         System.out.println((e - s) / 1000 + "s");
 //        System.out.println(Arrays.toString(array));
@@ -89,14 +95,15 @@ public class SortTesting {
     }
 
     public static void main(String[] args) {
-        int size = 5_0000;
+//        int size = 5_0000;
+        int size = 1_0000;
         long[] arr1 = generateRandomArray(size);
         testSort(arr1);
 
-//        long[] arr2 = generateSortedArray(size);
-//        testSort(arr2);
-//
-//        long[] arr3 = generatedReversedArray(size);
-//        testSort(arr3);
+        long[] arr2 = generateSortedArray(size);
+        testSort(arr2);
+
+        long[] arr3 = generatedReversedArray(size);
+        testSort(arr3);
     }
 }

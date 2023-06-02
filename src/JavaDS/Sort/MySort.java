@@ -1,6 +1,8 @@
 package JavaDS.Sort;
 
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class MySort {
     //冒泡排序
@@ -153,37 +155,50 @@ public class MySort {
 
     //堆排序
     public static void heapSort(long[] arr) {
-        if(arr == null || arr.length == 0 || arr.length == 1){
-            return;
-        }
-        //首先先对数组进行建堆操作
-        //建立一个大堆
-        //按照大堆的规范对数组进行调整
-        int size = arr.length;
-        for(int i = (size - 1) / 2 ;i >= 0;i--){
-            shiftDown(arr,i,size);
-        }
-        //然后每一次都去取堆顶元素，将其放置到最后的有序区间内，并对堆顶元素进行向下调整
-        //[无序区间][有序区间]
-        //[0,i + 1)[i + 1,size)
-        for(int i = size - 1;i >= 0;i--){
-            swap(arr,0,i);
-            shiftDown(arr,0,i - 1);
+        // 1. 由于要排升序，把整个无序区间（一开始整个 array 都是无序区间）都建成大堆
+        createLargeHeap(arr, arr.length);   // O(n) ~ O(n * log(n))
+
+        // 开始堆选择过程      // O(n * log(n))
+        for (int i = 0; i < arr.length - 1; i++) {    // n 次
+            // 无序区间: [0, array.length - i)
+            // 由于无序区间已经是大堆了，所以最大的元素在 [0] 下标
+            // 把最大的元素和无序区间的最后一个元素 [array.length - i - 1] 交换
+            swap(arr, 0, arr.length - i - 1);   // O(1)
+            // 随着这次交换发生，无序区间少了一个元素，所以新的无序区间还剩 array.length - i - 1
+            // 现在新的无序区间暂时不是大堆了，堆顶元素位置破坏了
+            // 所以需要进行一次向下调整操作，调整的下标是 [0]
+            shiftDown(arr, arr.length - i - 1, 0);  // O(log(n))
         }
     }
-    public static void shiftDown(long[] arr,int index,int size){
-        int leftIdx = index * 2 + 1;
-        int rightIdx = index * 2 + 2;
-        if(leftIdx >= size){//代表该位置为叶子结点
-            return;
+
+    private static void createLargeHeap(long[] arr, int size) {
+        int lastIdx = size - 1;
+        int lastParentIdx = (lastIdx - 1) / 2;
+        for (int i = lastParentIdx; i >= 0; i--) {
+            shiftDown(arr, size, i);
         }
-        int maxIdx = leftIdx;
-        if(rightIdx < size && arr[rightIdx] > arr[leftIdx]){
-            maxIdx = rightIdx;
-        }
-        if(arr[maxIdx] > arr[index]){
-            swap(arr,maxIdx,index);
-            shiftDown(arr,maxIdx,size);
+    }
+
+    // O(log(n))
+    private static void shiftDown(long[] arr, int size, int index) {
+        while (true) {
+            int leftIdx = 2 * index + 1;
+            if (leftIdx >= size) {
+                return;
+            }
+
+            int maxIdx = leftIdx;
+            if (maxIdx + 1 < size && arr[maxIdx + 1] > arr[maxIdx]) {
+                maxIdx++;
+            }
+
+            if (arr[index] >= arr[maxIdx]) {
+                return;
+            }
+
+            swap(arr, maxIdx, index);
+
+            index = maxIdx;
         }
     }
 
@@ -235,6 +250,24 @@ public class MySort {
      2. 当元素个数较小时（16 个），直接用插排代替
      3. 非递归（了解即可）
      */
+    //对[fromIdx ,toIdx]区间进行插入排序
+    public static void insertSortRange1(long[] arr, int fromIdx, int toIdx) {
+
+        int size = toIdx - fromIdx + 1;
+        if(size == 0 || size == 1){
+            return;
+        }
+        for (int i = 1; i < size; i++) {
+            // [fromIdx, toIdx]
+            // [fromIdx, fromIdx + i)
+            long key = arr[fromIdx + i];
+            int j;
+            for (j = fromIdx + i - 1; j >= fromIdx && key < arr[j]; j--) {
+                arr[j + 1] = arr[j];
+            }
+            arr[j + 1] = key;
+        }
+    }
     public static void quickSort(long[] arr){
         quickSortRange(arr,0,arr.length - 1);
     }
@@ -242,18 +275,120 @@ public class MySort {
         if(arr == null || arr.length == 0 || arr.length == 1){
             return;
         }
+        //优化 ： 1.当元素个数较少的时候，使用插入排序代替
         int size = toIdx - fromIdx + 1;
-        if(size <= 1){
+
+        if (size <= 16) {
+            insertSortRange1(arr, fromIdx, toIdx);
             return;
         }
-//        int index = partition(arr,fromIdx,toIdx);
+
+        // 增加一个 3 数取中法
+        long e1 = arr[fromIdx];
+        long e2 = arr[(fromIdx + toIdx) / 2];
+        long e3 = arr[toIdx];
+
+        int pivotIdx;
+        if (e1 < e2) {
+            if (e2 < e3) {
+                pivotIdx = (fromIdx + toIdx) / 2;
+            } else if (e1 < e3) {
+                pivotIdx = toIdx;
+            } else {
+                pivotIdx = fromIdx;
+            }
+        } else {
+            // e2 <= e1
+            if (e1 < e3) {
+                pivotIdx = fromIdx;
+            } else if (e3 < e2) { // e3 <= e1
+                pivotIdx = (fromIdx + toIdx) / 2;
+            } else {
+                pivotIdx = toIdx;
+            }
+        }
+
+        // 把 pivot 交换到最后边
+        swap(arr, pivotIdx, toIdx);
+
+//        int index = partition3(arr,fromIdx,toIdx);
 //        quickSortRange(arr,fromIdx ,index - 1);
 //        quickSortRange(arr,index + 1,toIdx);
-        int[] indexes = partition(arr,fromIdx,toIdx);
-        int leIdx = indexes[0];//leIdx 为 < 基准值的边界
-        int geIdx = indexes[1];//geIdx 为 > 基准值的边界
-        quickSortRange(arr,fromIdx ,geIdx);
-        quickSortRange(arr,leIdx,toIdx);
+//        pivotIdx 是 partition 之后，pivot 所在的下标
+//        int pivotIdx = partition3(array, fromIdx, toIdx);
+        int[] borderIdx = partition(arr, fromIdx, toIdx);
+        int leIdx = borderIdx[0];
+        int geIdx = borderIdx[1];
+
+        // 整个 [fromIdx, toIdx] 的区间被 pivot 分成两部分
+        // 左边: [fromIdx, pivotIdx - 1]
+        // 右边: [pivotIdx + 1, toIdx]
+        quickSortRange(arr, fromIdx, leIdx);
+        quickSortRange(arr, geIdx, toIdx);
+    }
+
+    //快速排序的非递归写法
+
+    /**
+     * 非递归快速排序实际不一定必须使用栈，只是需要一个容器来记录区间的边界条件，
+     * 比如使用队列也是可行的
+     */
+    public static void quickSort非递归版本(long[] arr) {
+        if(arr == null || arr.length == 0 || arr.length == 1){
+            return;
+        }
+        //优化 ： 1.当元素个数较少的时候，使用插入排序代替
+        int size = arr.length;
+
+        if (size <= 16) {
+            insertSortRange1(arr, 0, size - 1);
+            return;
+        }
+
+        // 增加一个 3 数取中法
+        long e1 = arr[0];
+        long e2 = arr[(0 + size - 1) / 2];
+        long e3 = arr[size - 1];
+
+        int pivotIdx;
+        if (e1 < e2) {
+            if (e2 < e3) {
+                pivotIdx = (0 + size - 1) / 2;
+            } else if (e1 < e3) {
+                pivotIdx = size - 1;
+            } else {
+                pivotIdx = 0;
+            }
+        } else {
+            // e2 <= e1
+            if (e1 < e3) {
+                pivotIdx = 0;
+            } else if (e3 < e2) { // e3 <= e1
+                pivotIdx = (0 + size - 1) / 2;
+            } else {
+                pivotIdx = size - 1;
+            }
+        }
+
+        // 把 pivot 交换到最后边
+        swap(arr, pivotIdx, size - 1);
+
+        Deque<Integer> stack = new LinkedList<>();
+        stack.push(0);
+        stack.push(size - 1);
+        while(!stack.isEmpty()){
+            int geIdx = stack.pop();
+            int leIdx = stack.pop();
+            if(leIdx >= geIdx){
+                continue;
+            }
+            int[] indexArr = partition(arr,leIdx,geIdx);
+            stack.push(leIdx);
+            stack.push(indexArr[0]);
+            stack.push(indexArr[1]);
+            stack.push(geIdx);
+        }
+
     }
 
     /**
@@ -389,6 +524,15 @@ public class MySort {
 
         return new int[] { leIdx - 1, geIdx + 1 };
     }
+
+    //归并排序
+    public static void mergeSort(long[] arr){
+
+    }
+
+    private static void merge(){
+
+    }
     public static void swap(long[] arr,int a ,int b){
         long temp = arr[a];
         arr[a] = arr[b];
@@ -397,8 +541,9 @@ public class MySort {
 
     public static void main(String[] args) {
         long[] arr = {2,4,7,2,5,73,2,6,8,2,5,7};
+//        long[] arr = {9,8,7,6,5,4,3,2,1};
         double s = System.currentTimeMillis();
-        quickSort(arr);
+        quickSort非递归版本(arr);
         double e = System.currentTimeMillis();
         System.out.println(Arrays.toString(arr));
         System.out.println((e - s) / 1000 + "s");
