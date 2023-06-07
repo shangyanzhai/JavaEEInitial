@@ -100,9 +100,35 @@ public class CommonThreadMethod {
      * 启动线程 thread.start()
      * 启动线程，即将线程的状态从 NEW 变成 RUNNABLE
      * (实际只是就绪状态，什么时候真正被调度到 CPU 上开始执行线程中的语句，对我们来说是随机的）
+     *
+     * 对比 thread.start() 和 thread.run()
+     *         //thread.start() 启动线程，让启动的线程去干活
+     *         //thread.run() 没有启动线程，自己去干活
      */
+    public static class StartVsRun extends Thread{
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName());
+        }
+    }
     //对比
-    public static void main(String[] args) {
+    public static void main4(String[] args) {
+        //对比 thread.start() 和 thread.run()
+        //thread.start() 启动线程，让启动的线程去干活
+        //thread.run() 没有启动线程，自己去干活
+        StartVsRun s = new StartVsRun();
+        s.start();//Thread - 0
+        s.run();//main
+    }
 
+    /**
+     * 一个线程停止另一个线程（前提：两个线程都已经启动了）
+     * 原理上，有 2 种停止方案：
+     * 1. 粗暴地直接杀掉该线程。由于杀掉之后，可能造成损毁的中间数据，所以不建议使用。
+     * 2. 采用协商式的停止，需要被停止的线程事先准备好一些准备工作。【主要采用的方式】
+     */
+    //1.粗暴地直接杀掉该线程。由于杀掉之后，可能造成损毁的中间数据，所以不建议使用。
+    public static void main(String[] args) {
+        
     }
 }
