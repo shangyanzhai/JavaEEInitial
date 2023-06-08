@@ -1,5 +1,6 @@
 package JavaEE.Threads;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class CommonThreadMethod {
@@ -128,7 +129,23 @@ public class CommonThreadMethod {
      * 2. 采用协商式的停止，需要被停止的线程事先准备好一些准备工作。【主要采用的方式】
      */
     //1.粗暴地直接杀掉该线程。由于杀掉之后，可能造成损毁的中间数据，所以不建议使用。
-    public static void main(String[] args) {
-        
+    public static class SubThread extends Thread{
+        @Override
+        public void run() {
+            while(true){
+                System.out.println("A");
+            }
+        }
     }
+    public static void main5(String[] args) {
+        SubThread s = new SubThread();
+        s.start();
+
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+        s.stop();
+    }
+
+    //2. 采用协商式的停止，需要被停止的线程事先准备好一些准备工作。【主要采用的方式】
+
 }
