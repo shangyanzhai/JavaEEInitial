@@ -222,7 +222,7 @@ public class CommonThreadMethod {
      * 协商式的停止，需要被停止方关注停止信号的发出，并且及时/主动地在收到中断信号后停止线程的运行（此过程需要自觉，没有任何强制力）。
      *
      * 接收中断信号的方式：
-     * 1. 如果正在休眠，通过 捕获到 InterruptedExcetpion 获知
+     * 1. 如果正在休眠，通过 捕获到 InterruptedException 获知
      * 2. 如果没有休眠，通过调用 Thread.interrupted() == true 获知
      *
      * 给 t 线程发送中断信号的方式
