@@ -147,5 +147,63 @@ public class CommonThreadMethod {
     }
 
     //2. 采用协商式的停止，需要被停止的线程事先准备好一些准备工作。【主要采用的方式】
+//    static class InterruptSubThread extends Thread{
+//        @Override
+//        public void run() {
+//            while(true){
+//                System.out.println("A");
+//
+//                boolean interrupted = Thread.interrupted();
+//                if(interrupted){
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//
+//    public static void main(String[] args) {
+//        InterruptSubThread interruptSubThread = new InterruptSubThread();
+//        interruptSubThread.start();
+//
+//        Scanner sc = new Scanner(System.in);
+//        sc.nextLine();
+//
+//        interruptSubThread.interrupt();
+//    }
 
+    //基于协商式的方案，如果被停止线程正在 sleep（或者其他类似的休眠动作）时，则无法及时地响应停止信号。
+    //为了避免这种情况，JVM 让所有的休眠动作，可能会抛出 InterruptedException，代表有人给当前线程发送中断信号了。
+    //换言之，一个线程如何判断自己有没有别人中断？
+    //1. 如果正在休眠，通过捕获 InterruptedException 异常得知
+    //2. 如果没有在休眠，需要通过定期调用 Thread.interrupted() 方法得知。
+    //得知中断信号之后，后序要如何处理，完全看代码实现。
+
+    static class InterruptSubThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    System.out.println("A");
+
+                    TimeUnit.SECONDS.sleep(10);
+                    boolean interrupted = Thread.interrupted();
+                    if (interrupted) {
+                        break;
+                    }
+                }
+            }catch(InterruptedException i){
+
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        InterruptSubThread interruptSubThread = new InterruptSubThread();
+        interruptSubThread.start();
+
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+
+        interruptSubThread.interrupt();
+    }
 }
