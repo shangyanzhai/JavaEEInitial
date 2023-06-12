@@ -1,4 +1,4 @@
-package JavaEE.Threads;
+package JavaEE.Threads.ThreadTheoryAndWay;
 
 /**
  * Java 中启动线程的几种基本方法

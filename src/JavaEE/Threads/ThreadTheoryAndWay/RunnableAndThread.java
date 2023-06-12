@@ -1,4 +1,4 @@
-package JavaEE.Threads;
+package JavaEE.Threads.ThreadTheoryAndWay;
 /**
  * Thread 和 Runnable 对比
  */
@@ -49,7 +49,7 @@ public class RunnableAndThread {
     }
     //线程：Thread 类的对象
     //创建线程对象时，需要被该线程分配任务（传入一个任务对象）
-    //此时，创建了一个子线程，该子线程正在不断的执行死循环操作，但是主线程是没有在执行的
+    //此时，创建了一个子线程，该子线程正在不断地执行死循环操作，但是主线程是没有在执行的
     //此时主线程和子线程间断的占用CPU资源，所以是一会打印A，一会打印B
     public static void main(String[] args) {
         // 通过任务类定义两个对象

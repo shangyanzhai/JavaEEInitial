@@ -1,4 +1,4 @@
-package JavaEE.Threads;
+package JavaEE.Threads.ThreadTheoryAndWay;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
