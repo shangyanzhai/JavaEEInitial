@@ -197,7 +197,7 @@ public class CommonThreadMethod {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main6(String[] args) {
         InterruptSubThread interruptSubThread = new InterruptSubThread();
         interruptSubThread.start();
 
@@ -232,5 +232,33 @@ public class CommonThreadMethod {
 
     /**
      * 一个线程等待另一个线程停止之后，才继续
+     * 两个执行流合并成一个执行流了 —— thread.join();
+     * 该方法的意义是将随机性得以确定
      */
+    // "joinThread 停止了" 是不是一定在"n1 停止了" 之前
+    // 这是可以保证的，因为n1 停止了一定是joinThread 的run方法执行结束以后执行
+    // 而可以保证的是 打印 "joinThread 停止了" 是在run方法中
+    public static class JoinThread extends Thread{
+        @Override
+        public void run() {
+            //因为这里是重写方法，所以不能直接将异常上抛到方法申明中去
+            //所以只能用try catch 来写
+            try{
+                TimeUnit.SECONDS.sleep(3);
+            }catch (InterruptedException e){
+
+            }
+
+            System.out.println("joinThread 停止了");
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException{
+        JoinThread n1 = new JoinThread();
+        n1.start();
+
+        n1.join();
+
+        System.out.println("n1 停止了");
+    }
 }

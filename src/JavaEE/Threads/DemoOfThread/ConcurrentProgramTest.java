@@ -1,4 +1,4 @@
-package JavaEE.Threads;
+package JavaEE.Threads.DemoOfThread;
 
 // 控制台上不断地、交替地打印 A 或者 B
 public class ConcurrentProgramTest {
