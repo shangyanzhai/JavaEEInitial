@@ -1,4 +1,4 @@
-package JavaEE.Threads.ThreadCommunication.ThreadSafe.Synchronized;
+package JavaEE.Threads.ThreadCommunication.ThreadSafe.Lock.Synchronized;
 
 /**
  * 锁的使用

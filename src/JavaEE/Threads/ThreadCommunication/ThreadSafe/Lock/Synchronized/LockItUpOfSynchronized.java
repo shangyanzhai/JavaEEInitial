@@ -1,7 +1,9 @@
-package JavaEE.Threads.ThreadCommunication.ThreadSafe.Synchronized;
+package JavaEE.Threads.ThreadCommunication.ThreadSafe.Lock.Synchronized;
 
 /**
  * 锁（synchronized 关键字）—— monitor lock
+ * synchronized 是一个可重入锁
+ *      即当前如果是上锁状态，如果上锁的人和目前锁的所持有人为同一个，即可以继续上锁
  * 通过 锁 让线程和线程之间呈现互斥（exclusive）关系。
  */
 /**
