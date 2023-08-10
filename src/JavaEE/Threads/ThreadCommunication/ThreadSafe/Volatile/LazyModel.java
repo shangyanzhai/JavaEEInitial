@@ -1,4 +1,4 @@
-package JavaEE.Threads.ThreadCommunication.ThreadSafe.SingletonModeOfThreadSafe;
+package JavaEE.Threads.ThreadCommunication.ThreadSafe.Volatile;
 
 /**
  * // 懒汉模式 / 懒加载（lazy-init）
@@ -43,22 +43,6 @@ public class LazyModel {
         return l;
     }
 
-    //优化1
-//    private static LazyModel l = null;
-//    public static LazyModel getInstance2() {
-//        // 该方法第一次被调用时，进行实例化即可
-//        if(l == null){
-//            //只在第一次的时候给其上锁
-//            synchronized (LazyModel.class){
-//                // 能否保证现在 s 仍然是 null？  无法保证
-//                if (l == null) {    // 二次判断机制 double-check
-//                    // 加锁期间，没有其他线程实例化过
-//                    l = new LazyModel();//此时仍然可能存在代码重排序
-//                }
-//            }
-//        }
-//        return l;
-//    }
 
     /**
      * SomeClass sc = new SomeClass(p1, p2, p3);

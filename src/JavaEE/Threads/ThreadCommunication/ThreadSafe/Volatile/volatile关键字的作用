@@ -1,0 +1,61 @@
+1. 保证了被修饰变量的内存可见性（最重要的作用）
+    volatile 解决内存可见性问题
+
+    public class VolatileDemo {
+        volatile static boolean quit = false;    // 共享
+
+        static class SubThread extends Thread {
+            @Override
+            public void run() {
+                while (!quit) { }   // 原则上，子线程看到 quit 变成 true 之后，就应该退出
+
+                System.out.println("子线程退出了");
+            }
+        }
+
+        public static void main(String[] args) {
+            SubThread t = new SubThread();
+            t.start();
+
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextLine();
+            quit = true;    // 主线程修改之后，原则，子线程应该能看到这个修改
+        }
+    }
+2. 不保证原子性操作，即下述代码仍然有原子性被破坏的风险
+    volatile int a = 0;
+
+    a++;    // 仍然是错误的，不保证原子性
+
+    // 仍然是错误的，不保证原子性
+    if (a == 0) {
+        a = 1;
+    }
+3. 在某个特定的场景下，volatile 有保证一点点原子性的效果
+    前提：JVM 是以 32bit 作为基本单位进行操作的！
+    int a = 3;    // 由于 int 是 32bit，所以赋值一步完成，原子的
+    short a = 3;  //      short 16bit
+
+    long a = 3L;  //      long  64bit，所以赋值 2 步完成：低/高 32bit 分别赋值，不是原子的
+    double a = 3; //      同理
+
+    volatile long a = 3L;    // 此刻，赋值是原子的
+    volatile double a = 3;   // 此刻，赋值是原子的
+
+    volatile long a = 0;    a++; // a++ 仍然不是原子的
+4. 关于某个局部代码重排序的保护
+    SomeClass sc = new SomeClass(p1, p2, p3);
+    1. 根据 SomeClass 类的信息，计算 SomeClass 对象的内存空间有多大
+       根据大小申请足够的内存
+       把刚申请好的内存统一初始化为 0x0。—— 属性的初始值是 0 的变种
+       —— 对象存在了，但不是一个合法的对象
+    2. 执行对象的初始化操作：执行构造代码块中的语句、构造方法中的语句。
+       —— 对象是一个合法的对象
+    3. 把对象赋值给 sc 引用 —— 暴露出对象，应用开发者可以看到对象
+
+    理论上是 1 -> 2 -> 3
+    实际中可能 1 -> 3 -> 2，在单线程情况下没有问题，但如果在多线程情况下
+                           则，有些线程可能看到非法对象，导致运行出错
+
+    volatile SomeClass sc = new SomeClass(p1, p2, p3);
+    // 禁止 1 -> 3 -> 2 的重排序
