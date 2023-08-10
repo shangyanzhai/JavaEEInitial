@@ -1,0 +1,19 @@
+使用 wait() 的注意事项
+1. 必须使用 synchronized 加锁
+2. 必须把 wait 放在某个 while 循环中，判断外部条件是否已经满足
+
+1.  要执行 o.wait()，必须先获取 o 的 monitor lock。
+    synchronized (o) {
+         o.wait();   // 实际上内部，等待之前会释放 o 这把锁
+    }
+    同理，notify 的时候也需要加锁
+    synchronized (o) {
+        o.notify();
+    }
+
+2.  我们 o.wait() 总是在等待某个条件的满足：比如 a == 0 作为条件
+    synchronized (o) {
+    while (a != 0) {
+                o.wait();
+          }
+    }

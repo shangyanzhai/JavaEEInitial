@@ -61,7 +61,7 @@ public class LazyModel {
      *     volatile SomeClass sc = new SomeClass(p1, p2, p3);
      *     // 禁止 1 -> 3 -> 2 的重排序
      */
-    private volatile static LazyModel l = null;
+    private volatile static LazyModel l = null;//将其设置为volatile，此时可以禁止下方的重排序
     //最终优化
     public static LazyModel getInstance() {
         // 该方法第一次被调用时，进行实例化即可
@@ -71,7 +71,7 @@ public class LazyModel {
                 // 能否保证现在 s 仍然是 null？  无法保证
                 if (l == null) {    // 二次判断机制 double-check
                     // 加锁期间，没有其他线程实例化过
-                    l = new LazyModel();//此时仍然可能存在代码重排序
+                    l = new LazyModel();//通过volatile禁止重排序
                 }
             }
         }
