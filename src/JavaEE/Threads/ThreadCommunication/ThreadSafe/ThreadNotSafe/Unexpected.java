@@ -1,4 +1,4 @@
-package JavaEE.Threads.ThreadCommunication.ThreadSafe;
+package JavaEE.Threads.ThreadCommunication.ThreadSafe.ThreadNotSafe;
 
 /**
  * 什么是线程安全
