@@ -22,5 +22,9 @@ public class MyTimerV2 {
         task.setRunAtTimestamp(runAt);
         // 把任务放入队列中
         queue.put(task);
+        synchronized (worker) {
+            worker.notify();
+//            System.out.println("worker.notify()");
+        }
     }
 }
