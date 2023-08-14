@@ -27,4 +27,19 @@ public class MyTimerV2 {
 //            System.out.println("worker.notify()");
         }
     }
+
+    public void scheduleAtFixedRate(MyTimerTask task, long delay, long period) throws InterruptedException {
+        // 计算任务要执行的时刻 = 当前时刻 + 延时
+        long runAt = System.currentTimeMillis() + delay;
+        task.setRunAtTimestamp(runAt);
+        task.setLoop(true);
+        task.setPeriod(period);
+
+        // 把任务放入队列中
+        queue.put(task);
+        synchronized (worker) {
+            worker.notify();
+//            System.out.println("worker.notify()");
+        }
+    }
 }
