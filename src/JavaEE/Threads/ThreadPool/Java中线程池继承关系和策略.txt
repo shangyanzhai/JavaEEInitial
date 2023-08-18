@@ -1,0 +1,92 @@
+Java 中已经提供的线程池
+https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html
+
+// 执行者
+interface Executor {
+    // Runnable : 任务（命令）
+    void execute(Runnable command);
+}
+
+// 执行服务
+interface ExecuteService extends Executor {
+    // 关闭执行服务
+    void shutdown();
+
+    // 马上关闭执行服务
+    List<Runnable> shutdownNow();
+
+    /**
+    当提交关闭要求时，一些任务还没有来得及完成：
+        任务未开始、任务进行中
+    shutdown(); 把所有的任务全部执行完才关闭，不接收新的任务了
+
+    shutdownNow(); 把未开始的任务返回
+    **/
+
+    //执行了关闭服务就已经进入了Shutdown状态，但是此时还会有一些已经进店的任务还在执行，关闭服务只是不在接收新的任务
+    boolean isShutdown();
+    //只有在所有的任务全部结束/终止关闭，即真正停止，才算进入Terminated状态
+    boolean isTerminated();
+    //等待关闭服务执行，但是超过这个超时时间timeout的话，就不在等待
+    boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+
+    // Runnable 是一种无结果任务的封装
+    // Callable 是一种带结果任务的封装
+    // Furture 是一种关于任务状态的未来的封装
+    <T> Future<T> submit(Callable<T> task);
+    <T> Future<T> submit(Runnable task, T result);
+    Future<?> submit(Runnable task);
+}
+
+// 线程池
+class ThreadPoolExecutor implements ExecutorService {
+    // 1. Java 线程池模型
+    // 2. 构造方法各参数的含义
+    public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue<Runnable> workQueue)
+
+    //最全的
+    public ThreadPoolExecutor(int corePoolSize,//指定正式员工编制（数量）
+                          int maximumPoolSize,//指定员工编制（数量）
+                          long keepAliveTime,
+                          TimeUnit unit,//keepAliveTime + unit指定最多线程可以闲的时间
+                          BlockingQueue<Runnable> workQueue,//指定工作队列
+                          ThreadFactory threadFactory,//指定是否需要线程工厂
+                          RejectedExecutionHandler handler)//指定采用哪种拒绝策略
+    // 3. 大概执行流程
+}
+
+// 线程工厂接口
+interface ThreadFactory {
+    Thread newThread(Runnable r)
+}
+
+线程池理解成一个公司
+core：正式员工
+maximum：正式员工 + 临时员工
+corePoolSize: 公司的正式员工的编制（最多允许有这么多正式员工）
+maximumSize: 公司所有员工的编制（最终允许有这么员工）
+
+1. 默认策略：公司开启了的时候一个员工都不招（懒加载策略）
+    1. 可以通过 prestartCoreThread() /prestartCoreThreadAll() 影响该策略
+2. 当有新任务被提交后：
+    1. 如果员工数量 < 正式员工编制，则一律招人完成该任务，无论是否其他员工是否空闲
+    2. 如果员工数量 >= 正式员工编制 && 员工数量 < 整体员工编制
+        1. 优先向阻塞队列放入（随后会被空闲的线程去处理）
+        2. 如果放不下（队列 full），则招新的员工处理（临时工）
+3. long keepAlive + TimeUnit unit
+   默认情况下，临时工可以闲多久被解雇
+   通过 allowCoreThreadTimeOut(boolean)，让正式工也可以被解雇
+4. 队列大体分 3 种：
+    1. 直接传递（完全不存）
+    2. 有容量上限 + 可以保存一部分任务
+    3. 无容量上限 + 可以保存一部分任务（不太建议实际中使用）
+5. 拒绝任务： 已经 shutdown 或者 容量满（线程够了 && 队列满了）
+   默认提供的 4 种拒绝策略：
+       AbortPolicy: 通过 RejectedExectionException 异常拒绝（默认）
+       CallerRunsPolicy: 由提交任务的线程自行完成
+       DiscardOldestPolicy: 丢弃队列中队首的任务
+       DiscardPolicy: 丢弃当前任务
