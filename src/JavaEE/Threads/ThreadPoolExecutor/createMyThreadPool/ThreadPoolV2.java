@@ -1,4 +1,4 @@
-package JavaEE.Threads.ThreadPool.createMyThreadPool;
+package JavaEE.Threads.ThreadPoolExecutor.createMyThreadPool;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
