@@ -1,0 +1,42 @@
+不可重入 + 不公平锁
+一个 boolean 的二元数据 + CAS 操作
+    class Lock {
+        private boolean isLocked = false;
+        private List<Thread> blockingQueue;
+
+        public void lock() {
+            if (cas(&isLocked, false, true)) {
+                return;
+            }
+
+            Thread.currentThread().setState(BLOCKING);
+            blockingQueue.atomicAdd(Thread.currentThread());
+            Thread.currentThread().放弃 CPU;
+        }
+
+        public void unlock() {
+            Thread t = blockingQueue.remove();
+            t.setState(Runnable);
+            isLocked = false;
+        }
+    }
+// 要保证可重入：需要在锁上记录关于锁持有者的线程标识。
+// 要保证公平性，需要先判断有没有其他线程处于阻塞队列，进行做后续处理。
+
+
+Synchronized 的锁优化/升级策略
+synchronized (ref) {
+    ...;
+}
+    1. JVM 判断实际运行中是单线程还是多线程 -> 锁消除
+    2. 锁的粒度过细：锁的粗化操作
+    3. 锁的偏向操作（Java 9 之后就没了）
+    多线程环境，这把锁到目前为止一直只有一个线程持有。
+          期间，该线程加锁不需要真正加锁
+          只有有第二个线程出现加锁了，偏向状态结束
+    3. 轻量级锁
+    JVM 自己实现的锁
+    优先做自旋，如果频繁地自旋失败，就会放弃资源 —— 自适应自旋锁
+          放弃自旋了，走向重量级锁
+    4. 重量级锁
+          OS 提供的锁：一旦加锁失败，放弃 CPU。
