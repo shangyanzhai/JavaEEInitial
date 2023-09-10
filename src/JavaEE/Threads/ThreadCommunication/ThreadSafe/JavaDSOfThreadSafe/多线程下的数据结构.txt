@@ -1,0 +1,60 @@
+多线程下的数据结构
+    ArrayList / LinkedList / PriorityQueue / HashMap / HashSet / TreeMap / TreeSet
+    都不是线程安全的。
+    Vector / Stack 是线程安全的。（所有方法全部被 synchronized 修饰）
+    StringBuilder 不是线程安全的。StringBuffer 是线程安全的。
+    上述的对象如果要用到多线程场景下：
+    1. 自行保证它的原子性
+        static ArrayList<String> list = ...;
+        static Lock lock = ...;
+
+        static class SubThread1 extends Thread {
+            @Override
+            public void run() {
+                lock.lock();
+                list.add(...)
+                list.remove(...);
+                lock.unlock();
+            }
+        }
+        static class SubThread2 extends Thread {
+            @Override
+            public void run() {
+                lock.lock();
+                list.add(...)
+                list.remove(...);
+                lock.unlock();
+            }
+        }
+
+    2. Java 中提供了一种便捷的方式
+    Collections 类下
+
+        static <T> List<T>synchronizedList(List<T> list)
+        static ArrayList<String> list = ...;
+        // 这个对象是自己处理加锁的
+        static List<String> syncList = Collections.synchronizedList(list);
+
+        // 组合的操作仍然需要我们自行加锁处理
+        /**
+            Vector vector = ...;
+            //Vector 对象是线程安全的
+            // 但是以下操作仍然是错误的
+            // 组合的操作仍然需要我们自行加锁处理
+            if (vector.size() == 1) {
+                vector.get(0);
+            }
+        */
+
+
+    更现代化的一些线程安全数据结构（来自 JUC 包）
+        CopyOnWriteArrayList 或者 CopyOnWriteArraySet
+        ArrayList 或者 ArraySet。Copy on write：写时复制。
+        //见写时复制（CopyOnWrite）图
+
+    ConcurrentHashMap 线程安全版本的 HashMap conMap
+    Vs  Collections.synchronizedHashMap(普通 hashMap)  syncMap
+    ConcurrentHashMap 的实现更为高效。
+
+    //Collections.synchronizedHashMap(普通 hashMap) 他只是给整个对象加了一把锁，所以他的并发性很低
+    //ConcurrentHashMap 线程安全版本的 HashMap 在Java 8 中将锁加到每一个链表上
