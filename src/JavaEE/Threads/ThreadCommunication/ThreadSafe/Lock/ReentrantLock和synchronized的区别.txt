@@ -1,0 +1,14 @@
+ReentrantLock 和 synchronized 的区别:
+    1.synchronized 是一个关键字, 是 JVM 内部实现的(大概率是基于 C++ 实现). ReentrantLock 是标准库的一个类, 在 JVM 外实现的(基于 Java 实现).
+    2.synchronized 使用时不需要手动释放锁. ReentrantLock 使用时需要手动释放. 使用起来更灵活,但是也容易遗漏 unlock.
+    3.synchronized 在申请锁失败时, 会死等. ReentrantLock 可以通过 tryLock 的方式等待一段时间就放弃.
+    4.synchronized 是非公平锁, ReentrantLock 默认是非公平锁. 可以通过构造方法传入一个 true 开启公平锁模式.
+    5.更强大的唤醒机制. synchronized 是通过 Object 的 wait / notify 实现等待-唤醒. 每次唤醒的是一个随机等待的线程.
+      ReentrantLock 搭配 Condition 类实现等待-唤醒, 可以更精确控制唤醒某个指定的线程.
+    6.synchronized 既是悲观锁也是乐观锁，synchronized 在jdk1.6之前是悲观锁，/*（synchronized的锁只可升级，不可降级）*/
+      在此之后，先是乐观锁，当一个线程获得了锁，就会由乐观锁升级成为偏向锁，当出现第二个对象时，再由偏向锁取消升级成为轻量级锁，当一但出现自旋失败的时候就会升级成为重量级锁
+
+如何选择使用哪个锁?
+    1.锁竞争不激烈的时候, 使用 synchronized, 效率更高, 自动释放更方便.
+    2.锁竞争激烈的时候, 使用 ReentrantLock, 搭配 tryLock 更灵活控制加锁的行为, 而不是死等.
+    3.如果需要使用公平锁, 使用 ReentrantLock.
