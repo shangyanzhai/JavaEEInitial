@@ -1,12 +1,37 @@
-修饰符及返回值类型   方法签名                                说明
-void              write(int b)                           写入要给字节的数据
-void              write(byte[] b)                        将 b 这个字符数组中的数据全部写入 os 中
-int               write(byte[] b, int off,int len)       将 b 这个字符数组中从 off 开始的数据写入 os 中，一共写 len 个
-void              close()                                关闭字节流
-void              flush()                                刷新缓冲区
-                                                         重要：我们知道 I/O 的速度是很慢的，所以，大多的 OutputStream 为
-                                                         了减少设备操作的次数，在写数据的时候都会将数据先暂时写入内存的
-                                                         一个指定区域里，直到该区域满了或者其他指定条件时才真正将数据写
-                                                         入设备中，这个区域一般称为缓冲区。但造成一个结果，就是我们写的
-                                                         数据，很可能会遗留一部分在缓冲区中。需要在最后或者合适的位置，
-                                                         调用 flush（刷新）操作，将数据刷到设备中。
+    修饰符及返回值类型   方法签名                                说明
+    void              write(int b)                           写入要给字节的数据
+    void              write(byte[] b)                        将 b 这个字符数组中的数据全部写入 os 中
+    int               write(byte[] b, int off,int len)       将 b 这个字符数组中从 off 开始的数据写入 os 中，一共写 len 个
+    void              close()                                关闭字节流
+    void              flush()                                刷新缓冲区
+                                                             重要：我们知道 I/O 的速度是很慢的，所以，大多的 OutputStream 为
+                                                             了减少设备操作的次数，在写数据的时候都会将数据先暂时写入内存的
+                                                             一个指定区域里，直到该区域满了或者其他指定条件时才真正将数据写
+                                                             入设备中，这个区域一般称为缓冲区。但造成一个结果，就是我们写的
+                                                             数据，很可能会遗留一部分在缓冲区中。需要在最后或者合适的位置，
+                                                             调用 flush（刷新）操作，将数据刷到设备中。
+
+    PrintWriter
+    修饰符及返回值类型   方法签名                                说明
+    void              write(char[] buf)                      这种方式不换行
+    void              write(char[] buf, int off, int len)
+    void              write(int c)
+    void              write(String s)
+    void              write(String s, int off, int len)
+    void	          println()                              想要换行的话可以使用 println
+    void	          println(boolean x)
+    void	          println(char x)
+    void	          println(char[] x)
+    void	          println(double x)
+    void	          println(float x)
+    void	          println(int x)
+    void	          println(long x)
+    void	          println(Object x)
+    void	          println(String x)
+
+    FileOutputStream 构造方法
+    FileOutputStream(File file)
+    FileOutputStream(File file, boolean append)//将boolean类型的append设为true，可以将其设置为追加方式，而不是替换方式
+    FileOutputStream(FileDescriptor fdObj)
+    FileOutputStream(String name)
+    FileOutputStream(String name, boolean append)

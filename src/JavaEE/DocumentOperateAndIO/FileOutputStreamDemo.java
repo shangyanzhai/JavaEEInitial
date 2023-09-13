@@ -18,24 +18,35 @@ public class FileOutputStreamDemo {
     }
 
     private static void write5() {
+//        try(PrintWriter writer = new PrintWriter("D:/temp/out.txt")){
+//            writer.println("你好,世界");
+//            writer.println("你好, Java");
+        //如果不写，不能复现，可能是资源关闭之前帮我调用了flush()操作
+//            writer.flush();//如果不写flush()是有可能没写进去的，但是 FileOutputStream 不写 flush() 是一定会写进去的 具体是否写进去要看其是否实现/重写了flush()
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         try{
             PrintWriter writer = new PrintWriter("D:/temp/out.txt");
             writer.println("你好,世界");
             writer.println("你好, Java");
-//            writer.flush();
+//            writer.flush();//如果不写flush()是有可能没写进去的，但是 FileOutputStream 不写 flush() 是一定会写进去的 具体是否写进去要看其是否实现/重写了flush()
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     private static void write4() {
+        //FileOutputStream(File file, boolean append)//将boolean类型的append设为true，可以将其设置为追加方式，而不是替换方式
         try(OutputStream outputStream = new FileOutputStream("D:/temp/out4.txt",true)) {
             try(PrintWriter writer = new PrintWriter(outputStream)) {
-                writer.println("你好,世界");
+//                writer.write("你好,世界");//write.write 这种方式不换行
+//                writer.write("你好, Java");
+                writer.println("你好,世界");//write.println 这种方式换行
                 writer.println("你好, Java");
 
-                outputStream.flush();
+                outputStream.flush();//FileOutputStream 不写 flush() 是一定会写进去的 具体是否写进去要看其是否实现/重写了flush()
             }
         }catch (Exception e){
             e.printStackTrace();
