@@ -1,0 +1,9 @@
+1. 文件分为 二进制文件 和 文本文件（文本文件本质还是一种特殊的二进制文件）
+
+2. 文件内容的操作 ：
+        1. 二进制文件读写
+                 1.1 InputStream （抽象类） FileInputStream（实现类） 是指读文件
+                 1.2 OutputStream （抽象类）FileOutputStream（实现类）是指写文件
+        2. 文本文件读写
+                 2.1 Reader（抽象类） FileReader（实现类）
+                 2.2 Writer（抽象类） FileWriter（实现类）

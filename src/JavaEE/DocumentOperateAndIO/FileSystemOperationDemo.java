@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class DemoOfFile {
+public class FileSystemOperationDemo {
     /** file方法
      *
      * 修饰符及返回值类型    方法签名            说明
