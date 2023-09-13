@@ -19,7 +19,7 @@ import java.util.Scanner;
  *
  * 4.void   close()     资源关闭
  */
-public class FileInputStreamDemo1 {
+public class FileInputStreamDemo {
     public static void main(String[] args) {
         //read()方法读取数据
 //        read1();
@@ -34,6 +34,11 @@ public class FileInputStreamDemo1 {
     }
 
     private static void read5() {
+//        Scanner scanner = new Scanner("D:/temp/hello.txt");//直接传进去一个地址
+//        while (scanner.hasNext()){
+//            String str = scanner.nextLine();
+//            System.out.println(str);
+//        }
         try(InputStream inputStream = new FileInputStream("D:/temp/hello.txt")) {
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNext()){
@@ -45,6 +50,10 @@ public class FileInputStreamDemo1 {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 在文本文件中，文本文件只有中文或者中文字符，该类方法还能实现，一但文本文件中出现中英文混合，则会出现乱码
+     */
 
     private static void read4() {
         try(InputStream inputStream = new FileInputStream("D:/temp/hello.txt")) {
