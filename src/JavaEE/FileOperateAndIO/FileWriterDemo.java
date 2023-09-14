@@ -1,4 +1,4 @@
-package JavaEE.DocumentOperateAndIO;
+package JavaEE.FileOperateAndIO;
 
 import java.io.FileWriter;
 import java.io.Writer;
