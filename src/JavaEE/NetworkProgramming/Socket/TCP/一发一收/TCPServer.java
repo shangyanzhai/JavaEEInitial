@@ -17,6 +17,24 @@ public class TCPServer {
     }
     private void start() throws IOException {
         System.out.println("服务器已启动...");
+
+        /**
+         * //创立线程池 ExecutorService
+         * //ExecutorService是java中的一个异步执行的框架，通过使用ExecutorService可以方便的创建多线程执行环境。
+         * 创建ExecutorService
+         * 通常来说有两种方法来创建ExecutorService。
+         *
+         * 第一种方式是使用Executors中的工厂类方法，例如:
+         * ExecutorService executor = Executors.newFixedThreadPool(10);
+         * 除了newFixedThreadPool方法之外，Executors还包含了很多创建ExecutorService的方法。
+         *
+         * 第二种方法是直接创建一个ExecutorService， 因为ExecutorService是一个interface，我们需要实例化ExecutorService的一个实现。
+         * 这里我们使用ThreadPoolExecutor来举例:
+         *
+         * ExecutorService executorService =
+         *             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
+         *                     new LinkedBlockingQueue<Runnable>());
+         */
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         while (true){
             Socket socket = serverSocket.accept();
