@@ -41,6 +41,8 @@ public class TCPDictServer {
     public void process(Socket socket){
         try(InputStream inputStream = socket.getInputStream()) {
             try(OutputStream outputStream = socket.getOutputStream()) {
+                //此处的Scanner, 是为了更好的解析发送端发过来的数据
+                //把二进制数据转成字符
                 Scanner scanner = new Scanner(inputStream);
                 while (true){
                     if (!scanner.hasNext()){
@@ -65,8 +67,6 @@ public class TCPDictServer {
 
                 }
             }
-            //此处的Scanner, 是为了更好的解析发送端发过来的数据
-            //把二进制数据转成字符
 
         }catch (Exception e){
             e.printStackTrace();
