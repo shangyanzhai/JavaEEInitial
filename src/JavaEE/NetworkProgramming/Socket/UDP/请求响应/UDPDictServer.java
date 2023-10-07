@@ -29,22 +29,22 @@ public class UDPDictServer {
          */
         while (true){
             byte[] buf = new byte[1024];
-            DatagramPacket clienPacket = new DatagramPacket(buf,buf.length);
-            socket.receive(clienPacket);
-            String request = new String(clienPacket.getData(),0,
-                    clienPacket.getLength(),"UTF-8");
+            DatagramPacket clientPacket = new DatagramPacket(buf,buf.length);
+            socket.receive(clientPacket);
+            String request = new String(clientPacket.getData(),0,
+                    clientPacket.getLength(),"UTF-8");
             //数据处理
 
             //根据请求, 进行响应
             String response = handle(request);
 
             DatagramPacket packet = new DatagramPacket(response.getBytes(),
-                    response.getBytes().length,clienPacket.getSocketAddress());
+                    response.getBytes().length,clientPacket.getSocketAddress());
             socket.send(packet);
 
             System.out.printf("接收到客户端数据[%s:%d]:%s,响应内容: %s\n",
-                    clienPacket.getAddress().getHostAddress(),
-                    clienPacket.getPort(),request,response);
+                    clientPacket.getAddress().getHostAddress(),
+                    clientPacket.getPort(),request,response);
         }
 
     }
